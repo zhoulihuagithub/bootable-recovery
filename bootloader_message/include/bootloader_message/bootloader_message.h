@@ -87,7 +87,7 @@ bool read_wipe_package(std::string* package_data, size_t size, std::string* err)
 bool write_wipe_package(const std::string& package_data, std::string* err);
 
 // Writes the reboot-bootloader reboot reason to the bootloader_message.
-bool write_reboot_bootloader(std::string* err);
+bool write_reboot_bootloader(std::string* err,std::string* cmd);
 
 #else
 

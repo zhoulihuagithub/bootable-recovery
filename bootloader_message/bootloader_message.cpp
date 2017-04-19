@@ -152,7 +152,7 @@ bool clear_bootloader_message(std::string* err) {
   return write_bootloader_message(boot, err);
 }
 
-bool write_reboot_bootloader(std::string* err) {
+bool write_reboot_bootloader(std::string* err,std::string* cmd) {
   bootloader_message boot;
   if (!read_bootloader_message(&boot, err)) {
     return false;
@@ -161,7 +161,12 @@ bool write_reboot_bootloader(std::string* err) {
     *err = "Bootloader command pending.";
     return false;
   }
-  strlcpy(boot.command, "bootonce-bootloader", sizeof(boot.command));
+  if(*cmd == "bootonce-bootloader")
+  	strlcpy(boot.command, "bootonce-bootloader", sizeof(boot.command));
+  else if(*cmd == "bootonce-fastboot")
+        strlcpy(boot.command, "bootonce-fastboot", sizeof(boot.command));
+  else if(*cmd == "bootonce-recovery")
+        strlcpy(boot.command, "bootonce-recovery", sizeof(boot.command));
   return write_bootloader_message(boot, err);
 }
 
@@ -191,7 +196,8 @@ bool write_wipe_package(const std::string& package_data, std::string* err) {
 
 extern "C" bool write_reboot_bootloader(void) {
   std::string err;
-  return write_reboot_bootloader(&err);
+  std::string cmd = "None";
+  return write_reboot_bootloader(&err,&cmd);
 }
 
 
